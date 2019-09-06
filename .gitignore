@@ -1,2 +1,5 @@
 model
 voice.mp3
+credentials.json
+token.pickle
+google/__pycache__
