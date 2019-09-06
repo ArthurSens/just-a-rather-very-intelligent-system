@@ -4,6 +4,7 @@ stemmer = LancasterStemmer()
 
 import os
 import time
+import dateutil.parser
 import playsound
 import speech_recognition
 from gtts import gTTS
@@ -13,12 +14,20 @@ import tensorflow
 import random
 import json
 import pickle
+import google.getEvents as gc
+
+# import pygame
 
 def speak(text):
     tts = gTTS(text=text, lang="en")
     filename = "voice.mp3"
     tts.save(filename)
     playsound.playsound(filename)
+
+    # pygame.mixer.init()
+    # pygame.mixer.music.load(filename)
+    # pygame.mixer.music.play()
+
 
 def get_audio():
     said = ""
@@ -64,6 +73,7 @@ def bag_of_words(s, words):
     return numpy.array(bag)
 
 def main():
+    
     said = ""
     while get_audio() != "Jarvis wake up":
         continue
@@ -85,11 +95,12 @@ def chat():
     print("                  /:/  /       |:|  |        ~~~~         \/__/        \::/  /    ")
     print("                  \/__/         \|__|                                   \/__/     ")
 
+    service = gc.authenticate_google()
     speak("All systems activated")
     while True:
         inp = get_audio()
         if "jarvis go to sleep" in inp.lower():
-            speak("It was a pleasure to serve you boss")
+            speak("It was a pleasure to serve you, boss")
             break
 
         results = model.predict([bag_of_words(inp, words)])[0]
@@ -97,12 +108,25 @@ def chat():
         results_index = numpy.argmax(results)
         tag = labels[results_index]
 
+        
         if results[results_index] > 0.7:
-            for intent in data['intents']:
-                if intent['tag'] == tag:
-                    responses = intent['responses']
+            if tag == 'calendar':
+                events = gc.get_events(3, service)
 
-            speak(random.choice(responses))
+                if not events:
+                    speak('No upcoming events found.')
+                for event in events:
+                    print(event['start'])
+                    start = event['start'].get('dateTime', event['start'].get('date'))
+                    startFormatted = dateutil.parser.parse(start).strftime('%c')
+                    print(startFormatted + " " + event['summary'])
+                    speak(startFormatted + " " + event['summary'])
+            else:
+                for intent in data['intents']:
+                    if intent['tag'] == tag:
+                        responses = intent['responses']
+
+                speak(random.choice(responses))
         else:
             speak("What the fuck are you saying? To me?")
 
