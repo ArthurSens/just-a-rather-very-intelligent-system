@@ -3,7 +3,9 @@ from nltk.stem.lancaster import LancasterStemmer
 stemmer = LancasterStemmer()
 
 import os
+import argparse
 import time
+import dateutil.parser
 import playsound
 import speech_recognition
 from gtts import gTTS
@@ -13,6 +15,8 @@ import tensorflow
 import random
 import json
 import pickle
+import google.getEvents as gc
+
 
 def speak(text):
     tts = gTTS(text=text, lang="en")
@@ -35,6 +39,89 @@ def get_audio():
 
     return said
 
+def bag_of_words(s, words):
+    bag = [0 for _ in range(len(words))]
+
+    s_words = nltk.word_tokenize(s)
+    s_words = [stemmer.stem(word.lower()) for word in s_words]
+
+    for se in s_words:
+        for i, w in enumerate(words):
+            if w == se:
+                bag[i] = 1
+            
+    return numpy.array(bag)
+
+def main():
+    
+    tag = ""
+
+    while tag != "greeting":
+        inp = get_audio()
+        results = model.predict([bag_of_words(inp, words)])[0]
+        print(results)
+        results_index = numpy.argmax(results)
+        tag = labels[results_index]
+
+    
+    print("      /\  \       /\  \         /\  \         /\__\          ___        /\  \     ")
+    print("      \:\  \     /::\  \       /::\  \       /:/  /         /\  \      /::\  \    ")
+    print("  ___ /::\__\   /:/\:\  \     /:/\:\  \     /:/  /          \:\  \    /:/\ \  \   ")
+    print(" /\  /:/\/__/  /::\~\:\  \   /::\~\:\  \   /:/__/  ___      /::\__\  _\:\~\ \  \  ")
+    print(" \:\/:/  /    /:/\:\ \:\__\ /:/\:\ \:\__\  |:|  | /\__\  __/:/\/__/ /\ \:\ \ \__\ ")
+    print("  \::/  /     \/__\:\/:/  / \/_|::\/:/  /  |:|  |/:/  / /\/:/  /    \:\ \:\ \/__/ ")
+    print("   \/__/           \::/  /     |:|::/  /   |:|__/:/  /  \::/__/      \:\ \:\__\   ")
+    print("                   /:/  /      |:|\/__/     \::::/__/    \:\__\       \:\/:/  /   ")
+    print("                  /:/  /       |:|  |        ~~~~         \/__/        \::/  /    ")
+    print("                  \/__/         \|__|                                   \/__/     ")
+
+    for intent in data['intents']:
+        if intent['tag'] == tag:
+            responses = intent['responses']
+
+    speak(random.choice(responses))
+
+    chat()
+
+def chat():
+    
+    while True:
+        inp = get_audio()
+
+        results = model.predict([bag_of_words(inp, words)])[0]
+        print(results)
+        results_index = numpy.argmax(results)
+        tag = labels[results_index]
+
+        
+        if results[results_index] > 0.7:
+            if tag == 'calendar':
+                events = gc.get_events(3, service)
+
+                if not events:
+                    speak('No upcoming events found.')
+                for event in events:
+                    print(event['start'])
+                    start = event['start'].get('dateTime', event['start'].get('date'))
+                    startFormatted = dateutil.parser.parse(start).strftime('%c')
+                    print(startFormatted + " " + event['summary'])
+                    speak(startFormatted + " " + event['summary'])
+
+            else:
+                for intent in data['intents']:
+                    if intent['tag'] == tag:
+                        responses = intent['responses']
+
+                speak(random.choice(responses))
+                if tag == "goodbye":
+                    # Kill process if we're saying goodbye to jarvis
+                    break
+        else:
+            speak("What the fuck are you saying? To me?")
+
+
+
+
 
 with open("model/data.pickle", "rb") as f:
     words, labels, training, output = pickle.load(f)
@@ -50,61 +137,18 @@ net = tflearn.regression(net)
 model = tflearn.DNN(net)
 model.load("model/model.tflearn")
 
-def bag_of_words(s, words):
-    bag = [0 for _ in range(len(words))]
 
-    s_words = nltk.word_tokenize(s)
-    s_words = [stemmer.stem(word.lower()) for word in s_words]
+parser = argparse.ArgumentParser(
+        description="Inspired by MCU J.A.R.V.I.S, a simple chatbot with voice"
+    )
+parser.add_argument('--credentials_path', metavar='', help='Path for the google calendar credential\'s file', default='credentials.json')
+credentials_path = parser.parse_args().credentials_path
 
-    for se in s_words:
-        for i, w in enumerate(words):
-            if w == se:
-                bag[i] = 1
-            
-    return numpy.array(bag)
+# Definição de variável global para autenticação de Google Calendar
+service = gc.authenticate_google(credentials_path)
 
-def main():
-    said = ""
-    while get_audio() != "Jarvis wake up":
-        continue
-
-    chat()
-
-def chat():
-    with open("intents.json") as file:
-        data = json.load(file)
-
-    print("      /\  \       /\  \         /\  \         /\__\          ___        /\  \     ")
-    print("      \:\  \     /::\  \       /::\  \       /:/  /         /\  \      /::\  \    ")
-    print("  ___ /::\__\   /:/\:\  \     /:/\:\  \     /:/  /          \:\  \    /:/\ \  \   ")
-    print(" /\  /:/\/__/  /::\~\:\  \   /::\~\:\  \   /:/__/  ___      /::\__\  _\:\~\ \  \  ")
-    print(" \:\/:/  /    /:/\:\ \:\__\ /:/\:\ \:\__\  |:|  | /\__\  __/:/\/__/ /\ \:\ \ \__\ ")
-    print("  \::/  /     \/__\:\/:/  / \/_|::\/:/  /  |:|  |/:/  / /\/:/  /    \:\ \:\ \/__/ ")
-    print("   \/__/           \::/  /     |:|::/  /   |:|__/:/  /  \::/__/      \:\ \:\__\   ")
-    print("                   /:/  /      |:|\/__/     \::::/__/    \:\__\       \:\/:/  /   ")
-    print("                  /:/  /       |:|  |        ~~~~         \/__/        \::/  /    ")
-    print("                  \/__/         \|__|                                   \/__/     ")
-
-    speak("All systems activated")
-    while True:
-        inp = get_audio()
-        if "jarvis go to sleep" in inp.lower():
-            speak("It was a pleasure to serve you boss")
-            break
-
-        results = model.predict([bag_of_words(inp, words)])[0]
-        print(results)
-        results_index = numpy.argmax(results)
-        tag = labels[results_index]
-
-        if results[results_index] > 0.7:
-            for intent in data['intents']:
-                if intent['tag'] == tag:
-                    responses = intent['responses']
-
-            speak(random.choice(responses))
-        else:
-            speak("What the fuck are you saying? To me?")
-
+# Load de arquivo de controle de controle de conversa
+with open("intents.json") as file:
+    data = json.load(file)
 
 main() 
