@@ -3,6 +3,7 @@ from nltk.stem.lancaster import LancasterStemmer
 stemmer = LancasterStemmer()
 
 import os
+import argparse
 import time
 import dateutil.parser
 import playsound
@@ -37,21 +38,6 @@ def get_audio():
             print("Please talk to me!")
 
     return said
-
-
-with open("model/data.pickle", "rb") as f:
-    words, labels, training, output = pickle.load(f)
-
-tensorflow.reset_default_graph()
-
-net = tflearn.input_data(shape=[None, len(training[0])])
-net = tflearn.fully_connected(net, 8)
-net = tflearn.fully_connected(net, 8)
-net = tflearn.fully_connected(net, len(output[0]), activation='softmax')
-net = tflearn.regression(net)
-
-model = tflearn.DNN(net)
-model.load("model/model.tflearn")
 
 def bag_of_words(s, words):
     bag = [0 for _ in range(len(words))]
@@ -88,8 +74,6 @@ def main():
     print("                   /:/  /      |:|\/__/     \::::/__/    \:\__\       \:\/:/  /   ")
     print("                  /:/  /       |:|  |        ~~~~         \/__/        \::/  /    ")
     print("                  \/__/         \|__|                                   \/__/     ")
-
-    service = gc.authenticate_google()
 
     for intent in data['intents']:
         if intent['tag'] == tag:
@@ -136,8 +120,32 @@ def chat():
             speak("What the fuck are you saying? To me?")
 
 
+
+
+
+with open("model/data.pickle", "rb") as f:
+    words, labels, training, output = pickle.load(f)
+
+tensorflow.reset_default_graph()
+
+net = tflearn.input_data(shape=[None, len(training[0])])
+net = tflearn.fully_connected(net, 8)
+net = tflearn.fully_connected(net, 8)
+net = tflearn.fully_connected(net, len(output[0]), activation='softmax')
+net = tflearn.regression(net)
+
+model = tflearn.DNN(net)
+model.load("model/model.tflearn")
+
+
+parser = argparse.ArgumentParser(
+        description="Inspired by MCU J.A.R.V.I.S, a simple chatbot with voice"
+    )
+parser.add_argument('--credentials_path', metavar='', help='Path for the google calendar credential\'s file', default='credentials.json')
+credentials_path = parser.parse_args().credentials_path
+
 # Definição de variável global para autenticação de Google Calendar
-service = None
+service = gc.authenticate_google(credentials_path)
 
 # Load de arquivo de controle de controle de conversa
 with open("intents.json") as file:
