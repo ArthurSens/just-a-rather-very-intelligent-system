@@ -16,18 +16,12 @@ import json
 import pickle
 import google.getEvents as gc
 
-# import pygame
 
 def speak(text):
     tts = gTTS(text=text, lang="en")
     filename = "voice.mp3"
     tts.save(filename)
     playsound.playsound(filename)
-
-    # pygame.mixer.init()
-    # pygame.mixer.music.load(filename)
-    # pygame.mixer.music.play()
-
 
 def get_audio():
     said = ""
@@ -74,16 +68,16 @@ def bag_of_words(s, words):
 
 def main():
     
-    said = ""
-    while get_audio() != "Jarvis wake up":
-        continue
+    tag = ""
 
-    chat()
+    while tag != "greeting":
+        inp = get_audio()
+        results = model.predict([bag_of_words(inp, words)])[0]
+        print(results)
+        results_index = numpy.argmax(results)
+        tag = labels[results_index]
 
-def chat():
-    with open("intents.json") as file:
-        data = json.load(file)
-
+    
     print("      /\  \       /\  \         /\  \         /\__\          ___        /\  \     ")
     print("      \:\  \     /::\  \       /::\  \       /:/  /         /\  \      /::\  \    ")
     print("  ___ /::\__\   /:/\:\  \     /:/\:\  \     /:/  /          \:\  \    /:/\ \  \   ")
@@ -96,12 +90,19 @@ def chat():
     print("                  \/__/         \|__|                                   \/__/     ")
 
     service = gc.authenticate_google()
-    speak("All systems activated")
+
+    for intent in data['intents']:
+        if intent['tag'] == tag:
+            responses = intent['responses']
+
+    speak(random.choice(responses))
+
+    chat()
+
+def chat():
+    
     while True:
         inp = get_audio()
-        if "jarvis go to sleep" in inp.lower():
-            speak("It was a pleasure to serve you, boss")
-            break
 
         results = model.predict([bag_of_words(inp, words)])[0]
         print(results)
@@ -121,14 +122,25 @@ def chat():
                     startFormatted = dateutil.parser.parse(start).strftime('%c')
                     print(startFormatted + " " + event['summary'])
                     speak(startFormatted + " " + event['summary'])
+
             else:
                 for intent in data['intents']:
                     if intent['tag'] == tag:
                         responses = intent['responses']
 
                 speak(random.choice(responses))
+                if tag == "goodbye":
+                    # Kill process if we're saying goodbye to jarvis
+                    break
         else:
             speak("What the fuck are you saying? To me?")
 
+
+# Definição de variável global para autenticação de Google Calendar
+service = None
+
+# Load de arquivo de controle de controle de conversa
+with open("intents.json") as file:
+    data = json.load(file)
 
 main() 
