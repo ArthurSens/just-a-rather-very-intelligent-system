@@ -8,7 +8,7 @@ from google.auth.transport.requests import Request
 
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
-def authenticate_google():
+def authenticate_google(credentials_path):
     creds = None
 
     if os.path.exists('token.pickle'):
