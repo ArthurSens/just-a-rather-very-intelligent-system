@@ -1,5 +1,6 @@
-model/*
+model/*/*/*
 voice.mp3
 credentials.json
 token.pickle
-google/__pycache__
+*/__pycache__
+__pycache__

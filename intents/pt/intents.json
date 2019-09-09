@@ -1,0 +1,27 @@
+{"intents": [
+        {"tag": "greeting",
+         "patterns": ["Oi", "Como vão as coisas?", "Acorda", "Ola jarvis", "Bom dia jarvis", "Jarvis, estais ai?", "Ei, Jarvis!", "Dae jarvis", "Alo alo"],
+         "responses": ["Dae", "Bom dia, senhor", "Opa, como posso ajudar?", "Como posso ajudá-lo hoje, senhor?", "Estou escutando!"],
+         "context_set": "intents"
+        },
+        {"tag": "goodbye",
+         "patterns": ["Tchau", "Até a próxima", "Pode ir dormir", "Estou indo dormir", "Até mais tarde jarvis", "Falou Jarvis", "Preciso ir, te vejo depois", "Falo com você mais tarde"],
+         "responses": ["Te vejo depois, senhor", "Tenha um bom dia, senhor", "Foi um prazer servir o senhor", "Okay, até a próxima"],
+         "context_set": "goodbye"
+        },
+        {"tag": "thanks",
+         "patterns": ["Obrigado", "Muito obrigado", "Isso foi útil"],
+         "responses": ["Estou aqui para ajuda, senhor!", "De nada!", "Foi um prazer, senhor"],
+         "context_set": "intents"
+        },
+        {"tag": "calendar",
+         "patterns": ["Quais são meus próximos compromissos?", "Eu tenho alguma reunião?", "Eu tenho algo planejado?", "Tenho algo planejado para o fim de semana?", "Eu tenho algo no meu calendário?", "Tem algo na minha agenda?" ],
+         "context_set": "intents"
+        },
+        {"tag": "changeLanguage",
+         "patterns": ["A gente pode falar em outra língua?", "Você fala outros idiomas?", "Quais idiomas você sabe?"],
+         "responses": ["Eu consigo falar em inglês e português, qual você prefere?", "Eu sei português e inglês, em qual você gostaria que eu falasse?"],
+         "context_set": "changeLanguage"
+        }
+   ]
+}
