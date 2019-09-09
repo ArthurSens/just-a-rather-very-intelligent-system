@@ -11,7 +11,7 @@
         },
         {"tag": "thanks",
          "patterns": ["Obrigado", "Muito obrigado", "Isso foi útil"],
-         "responses": ["Estou aqui para ajuda, senhor!", "De nada!", "Foi um prazer, senhor"],
+         "responses": ["Estou aqui para ajudar, senhor!", "De nada!", "Foi um prazer, senhor"],
          "context_set": "intents"
         },
         {"tag": "calendar",
