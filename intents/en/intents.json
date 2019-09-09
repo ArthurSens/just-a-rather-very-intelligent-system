@@ -1,0 +1,27 @@
+{"intents": [
+        {"tag": "greeting",
+         "patterns": ["Hi", "How are you jarvis", "Wake up", "Hello jarvis", "good morning jarvis", "Jarvis, are you there?", "Hey, Jarvis!"],
+         "responses": ["Hello, sir", "Good to see you again, sir", "Hi there, how can I help?", "how can I help you today, sir?", "I'm listening!"],
+         "context_set": "intents"
+        },
+        {"tag": "goodbye",
+         "patterns": ["Bye jarvis", "See you later jarvis", "Goodbye jarvis", "Go to sleep", "You can sleep now", "Until next time jarvis", "Anyway, I should get going"],
+         "responses": ["See you later, sir", "Have a nice day, sir", "Bye! Come back again soon.", "It was a pleasure to serve you, sir"],
+         "context_set": "goodbye"
+        },
+        {"tag": "thanks",
+         "patterns": ["Thanks", "Thank you", "That's helpful", "I really appreciate it.", "I owe you one"],
+         "responses": ["I'm here to help, sir!", "Any time!", "My pleasure, sir", "Don’t mention it, sir", "No problem, sir"],
+         "context_set": "intents"
+        },
+        {"tag": "calendar",
+         "patterns": ["What are my next appointments?", "Do I have any meetings?", "Do I have anything planned?", "Do I have anything planned for the week?", "Do I have anything on my calendar?" ],
+         "context_set": "intents"
+        },
+        {"tag": "changeLanguage",
+         "patterns": ["Can we talk in another language?", "Do you speak any other languages?", "What languages do you know?"],
+         "responses": ["I can speak English and Brazilian Portuguese, which one do you prefer?", "I know Brazilian Portuguese and English, which one do you like?"],
+         "context_set": "changeLanguage"
+        }
+   ]
+}

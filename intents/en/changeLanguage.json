@@ -1,0 +1,13 @@
+{"intents": [
+    {"tag": "en",
+     "patterns": ["English", "The american's language"],
+     "responses": ["English it is then", "Alright, I'll be talking in english from now on", "alrighty then"],
+     "context_set": "intents"
+    },
+    {"tag": "pt",
+     "patterns": ["Portuguese", "The brazilian's language", "Brazilian portugues"],
+     "responses": ["Beleza, português então", "Falarei em português daqui pra frente", "Beleza!"],
+     "context_set": "intents"
+    }
+]
+}
