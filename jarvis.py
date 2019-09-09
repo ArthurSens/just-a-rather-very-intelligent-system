@@ -12,6 +12,8 @@ import tensorflow
 import random
 import json
 import pickle
+import google.getEvents as gc
+
 
 import chatbot as chatbot
 import google.getEvents as gc
