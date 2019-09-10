@@ -23,7 +23,7 @@ RUN pip3 install playsound SpeechRecognition gTTs nltk numpy tflearn tensorflow 
 RUN python3 -c "import nltk; nltk.download('punkt')"
 
 # Train jarvis
-RUN mkdir -p /model
+RUN mkdir -p /model/pt/intents && mkdir -p /model/pt/changeLanguage && mkdir -p /model/en/intents && mkdir -p /model/en/changeLanguage
 RUN python3 /trainJarvis.py
 
 # Change default speaker
