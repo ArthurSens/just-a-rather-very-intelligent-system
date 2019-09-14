@@ -16,5 +16,5 @@ jobs:
     - name: Build the Docker image
       run: |
         docker build . --file Dockerfile --tag arthursens/jarvis:0.0.1
-        docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASS }}
+        docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASS }}
         docker push arthursens/jarvis:0.0.1
