@@ -4,7 +4,7 @@ Inspired by MCU J.A.R.V.I.S., just a simple chatbot with voice.
 
 ---
 
-Since the beggining of 2019, I've been craving to learn Python. One of the most popular languages, specially to Machine Learning. Something that I knew almost nothing about at the moment that this project was created.
+Since the beginning of 2019, I've been craving to learn Python. One of the most popular languages, specially to Machine Learning. Something that I knew almost nothing about at the moment that this project was created.
 
 After some tutorials at youtube, I've decided to start this project with the objective of learning Python and Machine Learning.
 
