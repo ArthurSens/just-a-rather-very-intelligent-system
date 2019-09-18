@@ -41,4 +41,4 @@ After some tutorials at youtube, I've decided to start this project with the obj
 
 ### Development Live Streaming
 
-* I try to code while live streaming at my [twitch channel](https://www.twitch.tv/arthursens) as often as possible, with the object of engage more people to help me out with this project. I can share a little bit of what I know and viewers can give me some directions about what I could possibly be doing wrong.
+* I try to code while live streaming at my [twitch channel](https://www.twitch.tv/arthursens) as often as possible, with the objective of engage more people to help me out with this project. I can share a little bit of what I know and viewers can give me some directions about what I could possibly be doing wrong.
